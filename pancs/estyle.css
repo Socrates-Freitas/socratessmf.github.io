@@ -1,0 +1,22 @@
+/* Cores: 
+Fundo: #527532
+Complementar 2(Surface): #AED7AD
+Complementar 3: #E6E1AA
+Complementar 4: #C7D462
+Comlpementar 5: #55302A
+texto: #FEFEFE
+*/
+
+*{
+    margin: 0 auto;
+}
+
+:root{
+    --primary-color: #527532;
+    --surface-color:#AED7AD;
+    --text-color:#FEFEFE;
+}
+
+body{
+    background-color: var(--primary-color);
+}
