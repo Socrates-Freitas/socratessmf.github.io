@@ -1,0 +1,125 @@
+/* Cores: 
+#DFD4C2
+#74BDFF
+#587597
+#728C3
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;1,700&display=swap');
+
+*{
+    margin: 0 auto;
+}
+
+:root{
+    --primary-color: #DFD4C2;
+    --surface-color:#587597;
+    --text-color:#000000;
+}
+
+body{
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    font-family: 'Roboto', sans-serif;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+#title{
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    font-weight: 700;
+}
+
+#image{
+    display: flex;
+    align-items: center;
+    margin-bottom: 80px;
+}
+
+#image img{
+    width: 75%;
+}
+
+.list-sector{
+    padding-top: 20px;
+    margin-bottom: 20px;
+    
+}
+.section-title{
+    margin-bottom: 10px;
+}
+
+.list-sector li{
+    margin-bottom: 10px;
+}
+
+#table-sector{
+    padding-top: 20px;
+    margin-bottom: 40px;
+}
+
+#table-sector table{
+    width: 90%;
+    margin-top: 40px;
+
+}
+
+#table-sector table,th,td{
+    border: 1px solid black;
+}
+
+
+#explanation{
+    margin: 20px 0 20px 0;
+}
+
+#videos{
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#videos iframe{
+    margin-bottom: 20px;
+}
+
+#button-section{
+    display: flex;
+    margin-top: 30px;
+    margin-bottom: 60px;
+}
+
+#button-section input{
+    width: 300px;
+    height: 80px;
+    background-color: var(--surface-color);
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: larger;
+    border-radius: 5px;
+    border-style: none;
+}
+
+#button-section input:hover{
+    width: 300px;
+    height: 80px;
+    background-color: var(--primary-color);
+    color: var(--surface-color);
+    font-weight: 700;
+    font-size: larger;
+    border-radius: 5px;
+    border: 1px solid var(--surface-color) ;
+}
+
+#button-section input:active{
+    width: 300px;
+    height: 80px;
+    background-color: #333333;
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: larger;
+    border-radius: 5px;
+    border-style: none;
+}
