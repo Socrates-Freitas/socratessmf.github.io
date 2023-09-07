@@ -6,6 +6,7 @@
 */
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;1,700&display=swap');
+/* Importando fonte roboto */
 
 *{
     margin: 0 auto;
@@ -41,7 +42,7 @@ body{
 }
 
 #image img{
-    width: 60%;
+    width: 55%;
 }
 
 .list-sector{
@@ -79,12 +80,10 @@ body{
 
 #table-sector td a{
     color: var(--text-color);
-    text-decoration: none;
 }
 
 #table-sector td a:hover{
     color: var(--link-hover);
-    text-decoration: none;
 }
 
 
