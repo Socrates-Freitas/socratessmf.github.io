@@ -45,18 +45,20 @@ body{
     width: 55%;
 }
 
+#list-container{
+    display: flex;
+    flex-direction: row;
+}
+
 .list-sector{
     padding-top: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     
 }
 .section-title{ /* É o título das sessões... */
     margin-bottom: 20px;
 }
 
-.list-sector li{
-    margin-bottom: 10px;
-}
 
 #table-sector{
     padding-top: 20px;
