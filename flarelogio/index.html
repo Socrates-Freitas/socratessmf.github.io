@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Flu's Clock</title>
+        <title>Flarelógio</title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="/cwdc/mainPage/LCG.css" />
@@ -11,16 +11,20 @@
                 --cgreen: #446127;
                 --corange: orange;
                 --cwhite: white;
-                --cwhite1: #8b2439;
+                --cwhite1: #C3281E;
                 --cwhite2: #446127;
                 --cwhite3: #446127;
+                --flavermelho: #C3281E;
+                --flapreto: black;
+                --fladourado: #CDAF41;
+                --background: white;
             }
             body {
                 margin: 20px;
             }
             #clock,
             #handles {
-                border: 5px solid #8b2439;
+                border: 5px solid var(--flavermelho);
                 padding: 20px;
                 margin: 0px;
             }
@@ -43,7 +47,7 @@
                 z-index: 2;
             }
             #clock {
-                background-color: antiquewhite;
+                background-color: black;
                 z-index: 1;
             }
         </style>
@@ -51,9 +55,7 @@
 
     <body>
         <p id="flu">
-            <a href="http://www.fluminense.com.br/site/"
-                >Fluminense Futebol Clube</a
-            >
+            <a href="https://www.flamengo.com.br/">Clube de Regatas do Flamengo</a>
             <sub style="font-size: small">
                 <a href="/cg/downloads/PDFs/04_LCG_Window-Viewport.pdf">[1]</a>
                 <a href="/python/laboratorios2.html#8c">[2]</a>

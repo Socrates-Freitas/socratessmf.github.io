@@ -69,6 +69,13 @@ var style = getComputedStyle(document.head);
 // Handle's origin border, III and IX, and clock border color.
 const grena = style.getPropertyValue("--cgrena");
 
+// Flamengo's red color
+const flavermelho = style.getPropertyValue("--flavermelho");
+
+const black = style.getPropertyValue("--flapreto");
+
+const fladourado = style.getPropertyValue("--fladourado");
+
 // Unused.
 const green = style.getPropertyValue("--cgreen");
 
@@ -231,7 +238,9 @@ function arc(center, radius, t1, t2, fill = true) {
  * @returns {Object} array of city coordinates.
  */
 async function readZones() {
-  const requestURL = `${location.protocol}/flarelogio/localtime.json`;
+  //const requestURL = `${location.protocol}/flarelogio/localtime.json`;
+  const requestURL = `../flarelogio/localtime.json`;
+
   const request = new Request(requestURL);
 
   const response = await fetch(request);
@@ -255,7 +264,7 @@ function drawClock(place) {
   // Browsers first loads a compressed version of image, then decodes it, finally paints it.
   // Draw the logo.
   const img = new Image();
-  img.src = "./rolex_bezel.png"; 
+  img.src = "./rolex_flabezel.png"; 
   img.decode().then(() => {
     // Translate the center of the logo
     // to the center of the canvas.
@@ -264,7 +273,7 @@ function drawClock(place) {
     context.drawImage(img, coord.x, coord.y, size[0], size[1]);
 
     const logo = new Image();
-    logo.src = "./fluminense.png"; 
+    logo.src = "./escudo_flamengo_branco.png"; 
     logo.decode().then(() => {
       // Translate the center of the logo
       // to the center of the canvas.
@@ -272,7 +281,7 @@ function drawClock(place) {
       var coord = translate(scale(size, [-1 / 2, -1 / 2]), center);
       context.drawImage(logo, coord.x, coord.y, size[0], size[1]);
       // Handle origin.
-      context.strokeStyle = grena;
+      context.strokeStyle = flavermelho;
       context.fillStyle = white;
       circle(center, 10);
       circle(center, 10, false);
@@ -282,7 +291,7 @@ function drawClock(place) {
   // context.globalAlpha = 0.3; // set global alpha
 
   // Draw clock border.
-  context.strokeStyle = grena;
+  context.strokeStyle = flavermelho;
   context.lineWidth = 3;
   circle(center, clockRadius - 8, false);
 
@@ -383,7 +392,7 @@ function drawClock(place) {
       times.sunset.getHours() + offset + ":" + times.sunset.getMinutes();
 
     console.log(sunriseStr, sunsetStr);
-    context.strokeStyle = orange;
+    context.strokeStyle = fladourado; // cor do arco do nascer e pôr do sol
     //arc(center, clockRadius - 8, sunriseStr, sunsetStr, false);
     arc(center, clockRadius - 8, sunsetStr, sunriseStr, false); // inverter arco do nascer e por do sol
 
@@ -397,6 +406,7 @@ function drawClock(place) {
   context.font = setFont(clockRadius / 10);
   drawClock.romans.map((n, i) => {
     context.fillStyle = n.c;
+    //context.fillStyle = flavermelho;
     var coord = polar2Cartesian(0.85 * clockRadius , i * fiveMin * -1); // inverter os numeros internos
     // translate to the center of the canvas
     coord = translate(coord, center);
@@ -423,13 +433,13 @@ drawClock.romans = [
   { txt: "XII", c: white1 },
   { txt: "I", c: white1 },
   { txt: "II", c: white1 },
-  { txt: "III", c: grena },
+  { txt: "III", c: flavermelho },
   { txt: "IV", c: white1 },
   { txt: "V", c: white1 },
   { txt: "VI", c: white1 },
   { txt: "VII", c: white1 },
   { txt: " VIII", c: white1 },
-  { txt: "IX", c: grena },
+  { txt: "IX", c: flavermelho },
   { txt: "X", c: white1 },
   { txt: "XI", c: white1 },
 ];
@@ -439,11 +449,11 @@ drawClock.romans = [
  * @member {Array<{txt: String, c: color}>} decimal clock numbers.
  */
 drawClock.decimals = Array.from(Array(24), (_, i) => {
-  return { txt: String(i), c: white2 };
+  return { txt: String(i), c: white }; // inner clock number color
 });
 drawClock.decimals[0].txt = "24";
-drawClock.decimals[6].c = white3;
-drawClock.decimals[18].c = white3;
+drawClock.decimals[6].c = white;
+drawClock.decimals[18].c = white;
 
 /**
  * A closure to redraw the clock handles.
@@ -457,10 +467,10 @@ drawClock.decimals[18].c = white3;
 var runAnimation = (() => { // closure que executa automaticamente
   // clock handles width x length X color
   const clock_handles = [
-    { width: 8, length: 0.5, c: orange },
-    { width: 8, length: 0.8, c: orange },
-    { width: 2, length: 0.9, c: orange },
-    { width: 1, length: 0.95, c: white3 },
+    { width: 8, length: 0.5, c: fladourado },
+    { width: 8, length: 0.8, c: fladourado },
+    { width: 2, length: 0.9, c: fladourado },
+    { width: 1, length: 0.95, c: flavermelho },
   ];
   const oneMin = pi / 30; // 6 degrees
   let timer = null;
@@ -512,7 +522,7 @@ var runAnimation = (() => { // closure que executa automaticamente
     );
     let theight = clockRadius / 15;
     ctx.font = setFont(theight);
-    ctx.fillStyle = white1;
+    ctx.fillStyle = flavermelho;
     [
       [date, tlen],
       [city, tcity],
