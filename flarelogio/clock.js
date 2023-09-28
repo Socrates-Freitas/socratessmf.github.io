@@ -223,7 +223,7 @@ function arc(center, radius, t1, t2, fill = true) {
   // Transforma o array 
   let [arcInit, arcEnd] = [t1, t2].map((t) => {
     let [hour, minutes] = t.split(":").map((q) => Number(q));
-    return 0.5 * (fiveMin * (hour + minutes / 60) - pi);
+   return (0.5 * (fiveMin * (hour + minutes / 60) - pi)) * -1; 
   });
 
   context.beginPath();
