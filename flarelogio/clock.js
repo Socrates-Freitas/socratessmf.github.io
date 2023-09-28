@@ -385,16 +385,19 @@ function drawClock(place) {
 
     // format sunrise time from the Date object
     let sunriseStr =
-      times.sunrise.getHours() + offset + ":" + times.sunrise.getMinutes();
+      (times.sunrise.getHours() ) + offset + ":" + times.sunrise.getMinutes();
 
     // format sunset time from the Date object
     let sunsetStr =
-      times.sunset.getHours() + offset + ":" + times.sunset.getMinutes();
+      (times.sunset.getHours() ) + offset + ":" + times.sunset.getMinutes();
 
-    console.log(sunriseStr, sunsetStr);
+    console.log(`Sunrise: ${sunriseStr} | Sunset: ${sunsetStr}`);
     context.strokeStyle = fladourado; // cor do arco do nascer e pôr do sol
-    //arc(center, clockRadius - 8, sunriseStr, sunsetStr, false);
-    arc(center, clockRadius - 8, sunsetStr, sunriseStr, false); // inverter arco do nascer e por do sol
+
+    arc(center , clockRadius - 8, sunriseStr, sunsetStr, false);
+
+
+    //arc(center, clockRadius - 8, sunsetStr, sunriseStr, false); // inverter arco do nascer e por do sol
 
   }
 
