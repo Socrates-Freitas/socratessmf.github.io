@@ -238,8 +238,12 @@ function arc(center, radius, t1, t2, fill = true) {
  * @returns {Object} array of city coordinates.
  */
 async function readZones() {
-  //const requestURL = `${location.protocol}/flarelogio/localtime.json`;
-  const requestURL = `../flarelogio/localtime.json`;
+
+  // Fornecido no código do classroom
+  //const requestURL = `${location.protocol}/cwdc/10-html5css3/clock/localtime.json`; 
+
+  // Correção
+  const requestURL = `../flarelogio/localtime.json`; // Link Correto
 
   const request = new Request(requestURL);
 
