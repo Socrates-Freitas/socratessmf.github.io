@@ -1,0 +1,56 @@
+:root {
+    --cgrena: #8b2439;
+    --cgreen: #446127;
+    --corange: orange;
+    --cwhite: white;
+    --cwhite1: #C3281E;
+    --cwhite2: #446127;
+    --cwhite3: #446127;
+    --flavermelho: #C3281E;
+    --flapreto: black;
+    --fladourado: #CDAF41;
+    --background: white;
+}
+body {
+    margin: 20px;
+    background-color: black;
+    color: white;
+}
+/* sem taxa de juros, mas com valor final e taxa inicial
+
+com juros, valor financiado e com valor final */
+
+a{
+    color: white;
+    text-decoration: none;
+}
+
+
+#clock,
+#handles {
+    border: 5px solid var(--flavermelho);
+    padding: 20px;
+    margin: 0px;
+}
+#flu {
+    width: 512px;
+    font-family: cursive;
+    text-align: center;
+    font-size: 30px;
+}
+#clock_container {
+    position: relative;
+    height: 512px;
+    margin: 0px;
+    margin-bottom: 50px;
+}
+canvas {
+    position: absolute;
+}
+#handles {
+    z-index: 2;
+}
+#clock {
+    background-color: black;
+    z-index: 1;
+}

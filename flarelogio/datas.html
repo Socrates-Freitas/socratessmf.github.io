@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles.css">
+
+    <script src="loadNavbar.js"></script>
+
+</head>
+<body>
+
+    <div  w3-include-html="navbar.html"></div>
+
+
+    <div class="container">
+
+        <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+              <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+              <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+              <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="img/RAngelim.jpg" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block">
+                  <a href="https://www.youtube.com/watch?v=7w8fNJQW6W0&pp=ygUbR29sIGJyYXNpbGVpcmFvIDIwMDkgZ3JlbWlv" target="_blank">
+                    <h5>Cabeçada de Rolnaldo Angelim</h5>
+                    <p id = "RAngelim">06/12/2009</p>
+                  </a>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img src="img/Petkovic.jpeg" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block">
+                  <a href="https://www.youtube.com/watch?v=vD_RcvoOIP0&pp=ygUkcGV0a292aWMgZ29sIGRlIGZhbHRhIGNvbnRyYSBvIHZhc2Nv"
+                  target="_blank">
+
+                    <h5>Cobrança de Petkovic</h5>
+                    <p id="Petkovic">Em  27/05/2001. </p>
+                  </a>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img src="img/Arrascaeta.jpg" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block">
+                  <a href="https://www.youtube.com/watch?v=J6dVVSlErk4&pp=ygUUYmljaWNsZXRhIGFycmFzY2FldGE%3D" target="_blank">
+                    <h5>Bicicleta de Arrascaeta</h5>
+                    <p id="Arrascaeta">Em 25/08/2019. </p>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+
+    </div>
+
+
+
+    <!-- <div class="container">
+        
+        <p>
+           
+            <small id="RAngelim">
+                Cabeçada de Rolnaldo Angelim
+                <a href="https://www.youtube.com/watch?v=7w8fNJQW6W0&pp=ygUbR29sIGJyYXNpbGVpcmFvIDIwMDkgZ3JlbWlv">
+                    06/12/2009
+                </a>
+            </small>
+            <br />
+            <small id="Petkovic">
+                Cobrança de Petkovic
+                <a href="https://www.youtube.com/watch?v=vD_RcvoOIP0&pp=ygUkcGV0a292aWMgZ29sIGRlIGZhbHRhIGNvbnRyYSBvIHZhc2Nv">
+                    27/05/2001
+                </a> 
+            </small>
+            <br />
+            <small id="Arrascaeta">
+                Bicicleta de Arrascaeta
+                <a href="https://www.youtube.com/watch?v=J6dVVSlErk4&pp=ygUUYmljaWNsZXRhIGFycmFzY2FldGE%3D">
+                    25/08/2019
+                </a>
+            </small>
+
+        </p>
+
+    </div> -->
+
+    <div class="container">
+        <iframe width="320" height="240" src="https://www.youtube.com/embed/N85y1EpfEXA?si=-x8vBdnwe-p3f2rY" title="Gol de Cobertura de Adriano Imperador" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <script src="date.js"></script>
+
+    <script>
+document.querySelector("#RAngelim").innerHTML += `(há ${elapsedYears("2009-12-06")} anos atrás)`;
+
+            document.querySelector("#Petkovic").innerHTML += `(há ${elapsedYears(
+                "2001-05-27"
+            )} anos atrás)`;
+
+            document.querySelector("#Arrascaeta").innerHTML += `(há ${elapsedYears(
+                "2019-08-25"
+            )} anos atrás)`;
+
+
+                    includeHTML();
+
+            
+    </script>
+    
+</body>
+</html>
