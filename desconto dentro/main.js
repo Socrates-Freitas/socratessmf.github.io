@@ -33,6 +33,11 @@ TODO: modularizar codigo pra pegar algumas informações individualmente
 TODO: transformar a tabela price em um array de arrays
 
 // ao usar navbar escuro, colocar navbar-dark dentro da classe e style = "background:<cor>"
+
+
+// CF * y = x
+// TODO: Usar visibilidade pra alternar entre formulario e Tabela
+
 */
 
 // desconto racional por dentro | ou desconto por dentro
@@ -46,26 +51,26 @@ function calcularParcelasComJuros(valorDeEmprestimo,coeficienteFinanciamento, eh
     return valorDeEmprestimo * (coeficienteFinanciamento / f);
 }
 
-function calcularCoeficienteFinanciamento(taxaJuros, quantidadeParcelas){
+export function calcularCoeficienteFinanciamento(taxaJuros, quantidadeParcelas){
     let taxaCorrigida = taxaJuros / 100;
     return taxaCorrigida / (1 - Math.pow(1 + taxaCorrigida, -quantidadeParcelas) );
 }
 
-function calcularValorPresente(coeficienteFinanciamento, taxaJuros, precoAPrazo,parcelas,ehPrimeiraTaxa){
+export function calcularValorPresente(coeficienteFinanciamento, taxaJuros, precoAPrazo,parcelas,ehPrimeiraTaxa){
     let f = fe(ehPrimeiraTaxa, taxaJuros);
 
     return (precoAPrazo / parcelas) * (f / coeficienteFinanciamento);
 
 }
 
-function calcularFatorAplicado(temEntrada, numParcelas,coeficienteFinanciamento, taxaJuros){
+ export function calcularFatorAplicado(temEntrada, numParcelas,coeficienteFinanciamento, taxaJuros){
     let f = fe(temEntrada, taxaJuros);
 
     return f/(numParcelas * coeficienteFinanciamento);
 }
 
 // Função para calcular a taxa de juros usando o Método de Newton
-function calcularTaxaDeJuros(precoAVista, precoAPrazo, numParcelas, temEntrada) {
+export function calcularTaxaDeJuros(precoAVista, precoAPrazo, numParcelas, temEntrada) {
     const tolerancia = 0.0001;  
     let taxaDeJuros = 0.1; // Palpite inicial
     let taxaDeJurosAnterior = 0.0;
@@ -129,7 +134,7 @@ function calcularValorDerivadaFuncao(precoAPrazo,taxaDeJuros,precoAVista, temEnt
         }
 }
     
-function calcularPrecoAPrazo(precoAVista, taxaDeJuros, numParcelas ){
+export function calcularPrecoAPrazo(precoAVista, taxaDeJuros, numParcelas ){
     // let precoAPrazo = 0;
 
     // for(let i =0; i < numParcelas; i++){

@@ -11,6 +11,8 @@
             href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css"
         />
         <script src="js-webshim/minified/polyfiller.js"></script>
+
+        
         <style type="text/css">
             .box {
                 background-color: antiquewhite;
@@ -32,7 +34,7 @@
                     "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial,
                     sans-serif;
             }
-            input {
+            input, button {
                 margin: 10px 3px 10px 3px;
                 border: 1px solid grey;
                 border-radius: 5px;
@@ -84,6 +86,7 @@
                 position: relative;
                 z-index: 3;
             }
+
             .messages {
                 text-align: center;
             }
@@ -91,6 +94,7 @@
             #table-content table, th, td{
                 border: 1px solid black;
             }
+
         </style>
     </head>
 
@@ -114,7 +118,7 @@
             >
                 <strong>Crédito Direto ao Consumidor</strong>
             </legend>
-            <form action="/cgi-bin/cdc.cgi" method="post">
+            <form action="#" method="post">
                 <div class="box">
                     <span class="input-group-addon" style="color: antiquewhite"
                         >$</span
@@ -191,12 +195,17 @@
                     <input id="idp" type="checkbox" name="dp" value="1" /><br />
                 </div>
                 <div class="messages">
-                    <input
+                    
+                    <!-- <input
                         id="submitButton"
                         class="button"
                         type="submit"
                         value="Calcular"
-                    />
+                    /> -->
+                    <button id="submitButton" class="button" type="button" value="Calcular" style="display: block;">
+                        Calcular
+                    </button>
+
                     <p>(arraste-me para reposicionar a janela)</p>
                 </div>
             </form>
@@ -218,54 +227,10 @@
             </div>
         </section>
 
-        <script src="LCG.js"></script>
+        <!-- <script src="LCG.js"></script> -->
+
         <script type="module" src="funcoesFront.js"></script>
-        <script type="module" src="main.js"></script>
 
 
-        <script type="text/javascript">
-
-            $("#submitButton").click(function (event) {
-                event.preventDefault();
-                var errorMessage = "";
-                if ($("#itax").val() == 0 && $("#ipp").val() == 0) {
-                    errorMessage +=
-                        "<p>Taxa de juros e valor final não podem ser ambos nulos.</p>";
-                }
-                if ($("#itax").val() == 0 && $("#ipv").val() == 0) {
-                    errorMessage +=
-                        "<p>Taxa de juros e valor financiado não podem ser ambos nulos.</p>";
-                }
-                if ($("#ipv").val() == 0 && $("#ipp").val() == 0) {
-                    errorMessage +=
-                        "<p>Valor financiado e valor final não podem ser ambos nulos.</p>";
-                }
-                if (errorMessage != "") {
-                    $("#errorMessage").html(errorMessage);
-                    $("#errorMessage").show();
-                    $("#successMessage").hide();
-                    event.preventDefault();
-                } else {
-                    $("#successMessage").show();
-                    $("#errorMessage").hide();
-                
-                }
-
-                
-
-                let tableElement = document.getElementById("table-content");
-
-                printTabelaPrice(450,500,10,0,false, tableElement);
-
-
-            });
-           // dragAndSave("#cdcfieldset"); // $("#cdcfieldset").draggable()
-
-            webshims.setOptions("forms-ext", {
-                replaceUI: "auto",
-                types: "number",
-            });
-            webshims.polyfill("forms forms-ext");
-        </script>
     </body>
 </html>
