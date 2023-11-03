@@ -6,8 +6,8 @@ x = preço à prazo
 y = preço à vista
 p = número de prestações
 R = valor de cada prestação
-A = preço atualizado??
-CF = Coeficiente de financiamento
+A = Valor presente = valor a vista [fator *= 1 + t][fator, x * fator]
+valor  futuro = x(inverso / dividir  (fator =/ 1+ t))CF = Coeficiente de financiamento
 t = taxa(porcentagem)
 k = fator aplicado
 
@@ -60,6 +60,11 @@ export function calcularValorPresente(coeficienteFinanciamento, taxaJuros, preco
     let f = fe(ehPrimeiraTaxa, taxaJuros);
 
     return (precoAPrazo / parcelas) * (f / coeficienteFinanciamento);
+}
+
+export function calcularValorFuturo(coeficienteFinanciamento, taxaJuros, precoAVista,parcelas,ehPrimeiraTaxa){
+    let f = fe(ehPrimeiraTaxa, taxaJuros);
+    return (precoAVista / parcelas) / (f / coeficienteFinanciamento);
 
 }
 
@@ -96,6 +101,22 @@ export function calcularTaxaDeJuros(precoAVista, precoAPrazo, numParcelas, temEn
     return taxaDeJuros;
 }
 
+export function getValorCorrigido(tabelaPrice,numeroParcelas,mesesAVoltar){
+    if(mesesAVoltar == 0 || mesesAVoltar >= numeroParcelas) return 0;
+    else{
+        let tamanho = tabelaPrice.length - 2;
+        return tabelaPrice[tamanho - mesesAVoltar ][4];
+    }
+}
+
+export function calcularValorAVoltar(pmt, numeroParcelas,mesesAVoltar){
+    if( Number(mesesAVoltar) > Number(numeroParcelas)){
+        return 0;
+    }
+    else{
+        return pmt * mesesAVoltar;
+    }
+}
 
 function calcularValorFuncao(precoAPrazo,taxaDeJuros,precoAVista, temEntrada, numParcelas){
 let a = 0; let b = 0; let c = 0;
@@ -145,39 +166,41 @@ export function calcularPrecoAPrazo(precoAVista, taxaDeJuros, numParcelas ){
     return precoAVista * (1 + taxaDeJuros)**numParcelas + taxaDeJuros;
 }
 
+export function calcularPMT(precoAVista,coeficienteFinanciamento){
+    return precoAVista * coeficienteFinanciamento;
+}
 
-
-
+// TODO Tirar Variavel Valor Parcela, uar PMT
 
 export function getTabelaPrice(precoAVista,precoAPrazo,numParcelas,taxaDeJuros,temEntrada){
 
-    let valorParcelas = 0; 
     let jurosReal = 0;
 
     let quantidadeParcelas = (temEntrada) ? (numParcelas - 1) : numParcelas;
 
+
     jurosReal = calcularTaxaDeJuros(precoAVista,precoAPrazo,numParcelas,temEntrada) * 100;
+    let coeficienteFinanciamento = calcularCoeficienteFinanciamento(jurosReal,numParcelas);
+
+
     jurosReal = jurosReal.toFixed(4);
+
+    precoAPrazo = (precoAPrazo > 0) ? precoAPrazo : precoAVista * coeficienteFinanciamento;
 
     let jurosTotal = 0, totalPago = 0, amortizacaoTotal = 0, saldoDevedorTotal = precoAVista;
  
-    let coeficienteFinanciamento = calcularCoeficienteFinanciamento(jurosReal,numParcelas);
-    let pmt = (coeficienteFinanciamento * precoAVista).toFixed(2);
+    let pmt =calcularPMT(precoAVista,coeficienteFinanciamento).toFixed(2);
 
- 
-     valorParcelas = (precoAPrazo / numParcelas).toFixed(2);
- 
- 
- 
 
     let jurosUsado = taxaDeJuros > 0? taxaDeJuros : jurosReal;
-    jurosUsado = jurosUsado;
+   // jurosUsado = jurosUsado;
 
     let tabelaPrice = [["Mês","Prestação", "Juros", "Amortizacao","Saldo Devedor"]];
 
   
 
     let juros = jurosUsado, amortizacao = 0, saldo = 0, saldoDevedor = precoAVista;
+
 
 
     for(let i = 1; i <= quantidadeParcelas; i++){
@@ -190,15 +213,15 @@ export function getTabelaPrice(precoAVista,precoAPrazo,numParcelas,taxaDeJuros,t
         amortizacao = (pmt - juros).toFixed(2);
 
         saldoDevedor -=  amortizacao;
+        saldoDevedor = saldoDevedor > 0 ? saldoDevedor : 0;
         saldoDevedor = saldoDevedor.toFixed(2);
 
         //saldoDevedorTotal = saldoDevedorTotal - amortizacao;
-        
-
-        tabelaPrice.push([i,valorParcelas, juros, amortizacao,saldoDevedor]);
+     
+        tabelaPrice.push([i,pmt, juros, amortizacao,saldoDevedor]);
 
         jurosTotal +=  Number(juros);
-        totalPago += Number(valorParcelas);
+        totalPago += Number(pmt);
         amortizacaoTotal += Number(amortizacao);
 
     }
