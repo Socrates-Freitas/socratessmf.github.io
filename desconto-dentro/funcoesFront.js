@@ -3,11 +3,11 @@ import { getTabelaPrice,
      calcularTaxaDeJuros,
      calcularFatorAplicado,
      calcularValorFuturo,
-     calcularValorPresente,
      calcularPrecoAPrazo,
      calcularPMT,
     getValorCorrigido,
-    calcularValorAVoltar } from "./main.js"; 
+    calcularValorAVoltar,
+    converterJurosMensalParaAnual } from "./main.js"; 
 
 
    // dragAndSave("#cdcfieldset"); // $("#cdcfieldset").draggable()
@@ -69,18 +69,19 @@ function handleButtonClick(){
 
             if(valorFinal == 0){
                 coeficienteFinanciamento = calcularCoeficienteFinanciamento(juros, numeroParcelas);
-                valorFinal = calcularValorPresente(coeficienteFinanciamento,juros,valorFinanciado,numeroParcelas,temEntrada);
+                valorFinal = calcularValorFuturo(coeficienteFinanciamento,juros,valorFinanciado,numeroParcelas,temEntrada);
+                //valorFinal = valorFinanciado * calcularFatorAplicado(temEntrada,numeroParcelas,coeficienteFinanciamento,juros);
             }
 
             tabelaPrice = getTabelaPrice(valorFinanciado,valorFinal,numeroParcelas,juros,temEntrada);
 
             printTabelaPrice(tabelaPrice, tableElement);
-           
+            valorCorrigido = getValorCorrigido(tabelaPrice,numeroParcelas,mesesAVoltar);
+
             printBox1(valorFinanciado,valorFinal,numeroParcelas,juros,temEntrada, mesesAVoltar,box1Element);
-            printBox2(valorFinanciado,valorFinal,numeroParcelas,juros,temEntrada, tableElement);
+            printBox2(valorFinanciado,valorFinal,numeroParcelas,juros,temEntrada, valorCorrigido, box2Element);
 
 
-        //        printTabelaPrice(450,500,10,0,false, tableDocumentElement);
         }
 
             
@@ -91,7 +92,8 @@ function handleButtonClick(){
 // TODO: Fazer a tabela price retornar o Valor a voltar e o
 
 function printTabelaPrice(tabelaPrice, tableDocumentElement){
-   let table = "";
+
+    let table = "";
  
    for(let i = 0; i < tabelaPrice.length; i++){
        if(i == 0){
@@ -167,11 +169,11 @@ Entrada: S/N
 
 
     divElement.innerHTML = `<p>Parcelamento: ${numParcelas} </p>
-    <p>Taxa: ${taxaDeJuros} Ao Mês (### Ao Ano) </p>
-    <p>Valor Financiado: ${precoAVista} </p>
-    <p>Valor Final: ${precoAPrazo}</p>
-    <p>Valor a voltar(Adiantamento da dívida) ${calcularValorAVoltar(pmt,numParcelas,mesesAVoltar).toFixed(2)} </p>
-    <p>Meses a Voltar ${mesesAVoltar} </p>
+    <p>Taxa: ${taxaDeJuros}% Ao Mês (${converterJurosMensalParaAnual(taxaDeJuros)}% Ao Ano) </p>
+    <p>Valor Financiado: $ ${precoAVista} </p>
+    <p>Valor Final: $ ${precoAPrazo}</p>
+    <p>Meses a Voltar(Adiantados) ${mesesAVoltar} </p>
+    <p>Valor a voltar(Adiantamento da dívida) $ ${calcularValorAVoltar(pmt,numParcelas,mesesAVoltar).toFixed(2)} </p>
     <p>Entrada: ${temEntrada ? "Sim" : "Não"} </p>`;
 
 }
@@ -189,7 +191,7 @@ Excesso = $1889 .10 - $1889 .10 = $ -0.00
 Excesso = ( $2099 .00 - $2099 .00) * 0.9000 = $ -0.00
 Percentual pago a mais = -0.00%
 */
-function printBox2(precoAVista,precoAPrazo,numParcelas,taxaDeJuros,temEntrada,divElement){
+function printBox2(precoAVista,precoAPrazo,numParcelas,taxaDeJuros,temEntrada,valorCorrigido,divElement){
 
     let text = "";
 
@@ -241,19 +243,21 @@ function printBox2(precoAVista,precoAPrazo,numParcelas,taxaDeJuros,temEntrada,di
     Percentual pago a mais = -0.00%
     */
 
+    let jurosEmbutido = ((precoAPrazo - precoAVista) / precoAVista) * 100;
+    jurosEmbutido = jurosEmbutido.toFixed(2);
+    let desconto = ((precoAPrazo - precoAVista) / precoAPrazo) * 100;
+    desconto = desconto.toFixed(2);
+
     divElement.innerHTML = `
+    <p> Prestação: $ ${pmt}</p>
+    <p> Taxa Real:  ${jurosReal}%</p>
     <p> Coeficiente de Financiamento: ${coeficienteFinanciamento} </p>
-    <p> Prestação: ${pmt}</p>
-    <p> Taxa Real:  ${jurosReal}</p>
-    <p> Valor Corrigido:  </p>
-    <p> Juros Embutido:   </p>
-    <p> Desconto:   </p>
-
-
-
-
+    <p>Fator Aplicado: ${calcularFatorAplicado(temEntrada,numParcelas,coeficienteFinanciamento,taxaDeJuros)}</p>
+    <p> Valor Corrigido: $ ${valorCorrigido} </p>
+    <p> Juros Embutido: ${jurosEmbutido}% </p>
+    <p> Desconto:  ${desconto}% </p>
     `;
 }
 
 
-handleButtonClick()
+handleButtonClick();

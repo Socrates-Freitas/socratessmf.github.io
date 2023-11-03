@@ -45,12 +45,6 @@ function fe(ehPrimeiraTaxa, taxaJuros){
     return  (ehPrimeiraTaxa == true)?  1 + taxaJuros : 1;
 }
 
-function calcularParcelasComJuros(valorDeEmprestimo,coeficienteFinanciamento, ehPrimeiraTaxa, taxaJuros){
-    let f = fe(ehPrimeiraTaxa, taxaJuros);
-
-    return valorDeEmprestimo * (coeficienteFinanciamento / f);
-}
-
 export function calcularCoeficienteFinanciamento(taxaJuros, quantidadeParcelas){
     let taxaCorrigida = taxaJuros / 100;
     return taxaCorrigida / (1 - Math.pow(1 + taxaCorrigida, -quantidadeParcelas) );
@@ -62,16 +56,26 @@ export function calcularValorPresente(coeficienteFinanciamento, taxaJuros, preco
     return (precoAPrazo / parcelas) * (f / coeficienteFinanciamento);
 }
 
-export function calcularValorFuturo(coeficienteFinanciamento, taxaJuros, precoAVista,parcelas,ehPrimeiraTaxa){
-    let f = fe(ehPrimeiraTaxa, taxaJuros);
-    return (precoAVista / parcelas) / (f / coeficienteFinanciamento);
+/*
+    Calcula o Valor Final(Preço à prazo) quando não fornecido(Precisa da taxa de Juros)
+*/
+export function calcularValorFuturo(coeficienteFinanciamento, taxaJuros, precoAVista,parcelas,temEntrada){
 
+    let resultado = precoAVista / calcularFatorAplicado(temEntrada,parcelas,coeficienteFinanciamento,taxaJuros);
+
+    return Number(resultado.toFixed(2));
 }
 
  export function calcularFatorAplicado(temEntrada, numParcelas,coeficienteFinanciamento, taxaJuros){
     let f = fe(temEntrada, taxaJuros);
 
     return f/(numParcelas * coeficienteFinanciamento);
+}
+
+export function converterJurosMensalParaAnual(juros){
+    juros /= 100;
+    let resultado = (Math.pow(1 + juros, 12) - 1) * 100;
+    return Number(resultado.toFixed(2));
 }
 
 // Função para calcular a taxa de juros usando o Método de Newton
@@ -102,7 +106,10 @@ export function calcularTaxaDeJuros(precoAVista, precoAPrazo, numParcelas, temEn
 }
 
 export function getValorCorrigido(tabelaPrice,numeroParcelas,mesesAVoltar){
-    if(mesesAVoltar == 0 || mesesAVoltar >= numeroParcelas) return 0;
+    mesesAVoltar = Number(mesesAVoltar);
+    if(mesesAVoltar == 0 || mesesAVoltar >= numeroParcelas){
+        return 0;
+    }
     else{
         let tamanho = tabelaPrice.length - 2;
         return tabelaPrice[tamanho - mesesAVoltar ][4];
