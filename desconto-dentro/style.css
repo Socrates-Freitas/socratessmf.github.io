@@ -1,3 +1,31 @@
+@media print{
+    body *:not(#result-container):not(#result-container *){
+        visibility: hidden;
+    }
+
+    #result-container{
+        position: absolute;
+        top:0;
+        left: 0;
+    }
+
+    #left-box, #right-box{
+        margin-top: 0;
+    }
+
+    
+   table, th, td{
+        border: 1px solid black !important;
+        font-size: 20px !important;
+        padding: 5px !important;
+
+        text-align: center !important;
+
+    }
+
+
+}
+
 .box {
     background-color: antiquewhite;
     box-shadow: 8px 8px 6px grey;
@@ -77,14 +105,36 @@ input.currency {
 
 #table-content table, th, td{
     border: 1px solid black;
+    font-size: 20px;
+    padding: 5px;
+
+    text-align: center;
+
 }
 
 
-#left-box, #right-box{
-    border: 1px black;
 
+#left-box, #right-box{
+    min-width: 10%;
+    border-style: dotted;
+    padding: 20px;
+    margin-bottom: 30px;
+    border-radius: 10px;
 }
 
 #summary-container{
     display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+
+    margin-top: 100px;
+}
+
+#table-container{
+    margin-top: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }

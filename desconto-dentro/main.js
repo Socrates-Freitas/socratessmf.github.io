@@ -26,21 +26,18 @@ Se tem entrada, primeira prestacao = 0; amortização = 0; juros = juros; amorti
 Se tiver taxa a juros e valor a vista -> Calular o valor a prazo
 Se tiver valor a vista e a prazo -> Calcular taxa de juros commetodo de newton
 
-TODO: Usar a taxa de juros do usuario
-
-TODO: modularizar codigo pra pegar algumas informações individualmente
-
-TODO: transformar a tabela price em um array de arrays
 
 // ao usar navbar escuro, colocar navbar-dark dentro da classe e style = "background:<cor>"
 
 
 // CF * y = x
-// TODO: Usar visibilidade pra alternar entre formulario e Tabela
 
 */
 
 // desconto racional por dentro | ou desconto por dentro
+
+"use strict";
+
 function fe(ehPrimeiraTaxa, taxaJuros){
     return  (ehPrimeiraTaxa == true)?  1 + taxaJuros : 1;
 }
@@ -145,12 +142,10 @@ let a = 0; let b = 0; let c = 0;
 
 function calcularValorDerivadaFuncao(precoAPrazo,taxaDeJuros,precoAVista, temEntrada, numParcelas){
     let a = 0; let b = 0;
-    // let c = 0;
         if(temEntrada){
             a = Math.pow(1+taxaDeJuros,numParcelas-2);
             b = Math.pow(1 + taxaDeJuros, numParcelas - 1);
-           // c = Math.pow(1 + taxaDeJuros, numParcelas);
-    
+
             return precoAVista * (b + (taxaDeJuros * a * (numParcelas - 1) ) ) - (precoAPrazo * b);
            
         }
@@ -162,17 +157,6 @@ function calcularValorDerivadaFuncao(precoAPrazo,taxaDeJuros,precoAVista, temEnt
         }
 }
     
-export function calcularPrecoAPrazo(precoAVista, taxaDeJuros, numParcelas ){
-    // let precoAPrazo = 0;
-
-    // for(let i =0; i < numParcelas; i++){
-    //     precoAPrazo += (precoAVista / numParcelas) * taxaDeJuros;
-    // }
-
-    // return precoAPrazo;
-    return precoAVista * (1 + taxaDeJuros)**numParcelas + taxaDeJuros;
-}
-
 export function calcularPMT(precoAVista,coeficienteFinanciamento){
     return precoAVista * coeficienteFinanciamento;
 }
@@ -189,18 +173,14 @@ export function getTabelaPrice(precoAVista,precoAPrazo,numParcelas,taxaDeJuros,t
     jurosReal = calcularTaxaDeJuros(precoAVista,precoAPrazo,numParcelas,temEntrada) * 100;
     let coeficienteFinanciamento = calcularCoeficienteFinanciamento(jurosReal,numParcelas);
 
-
-    jurosReal = jurosReal.toFixed(4);
-
     precoAPrazo = (precoAPrazo > 0) ? precoAPrazo : precoAVista * coeficienteFinanciamento;
 
-    let jurosTotal = 0, totalPago = 0, amortizacaoTotal = 0, saldoDevedorTotal = precoAVista;
+    let jurosTotal = 0, totalPago = 0, amortizacaoTotal = 0;
  
-    let pmt =calcularPMT(precoAVista,coeficienteFinanciamento).toFixed(2);
+    let pmt = Number(calcularPMT(precoAVista,coeficienteFinanciamento).toFixed(3));
 
 
     let jurosUsado = taxaDeJuros > 0? taxaDeJuros : jurosReal;
-   // jurosUsado = jurosUsado;
 
     let tabelaPrice = [["Mês","Prestação", "Juros", "Amortizacao","Saldo Devedor"]];
 
@@ -214,30 +194,27 @@ export function getTabelaPrice(precoAVista,precoAPrazo,numParcelas,taxaDeJuros,t
 
 
         // se for a primeira taxa, usar o juros la, senao, calcular
-        juros = (saldoDevedor * jurosUsado)/100;
-        juros = juros.toFixed(2); 
+        juros = (saldoDevedor * jurosUsado) / 100;
 
-        amortizacao = (pmt - juros).toFixed(2);
+        amortizacao = (pmt - juros);
 
         saldoDevedor -=  amortizacao;
+        
         saldoDevedor = saldoDevedor > 0 ? saldoDevedor : 0;
-        saldoDevedor = saldoDevedor.toFixed(2);
-
-        //saldoDevedorTotal = saldoDevedorTotal - amortizacao;
      
-        tabelaPrice.push([i,pmt, juros, amortizacao,saldoDevedor]);
+        tabelaPrice.push([i ,pmt.toFixed(2), juros.toFixed(3), amortizacao.toFixed(2), saldoDevedor.toFixed(2)]);
 
-        jurosTotal +=  Number(juros);
-        totalPago += Number(pmt);
-        amortizacaoTotal += Number(amortizacao);
+        jurosTotal +=  juros;
+        totalPago +=pmt;
+        amortizacaoTotal += amortizacao;
 
     }
 
     totalPago = totalPago.toFixed(2);
-    jurosTotal = jurosTotal.toFixed(2);
+    jurosTotal = jurosTotal.toFixed(3);
     amortizacaoTotal = amortizacaoTotal.toFixed(2);
 
-    tabelaPrice.push([`Total:`, `${totalPago}`,`${jurosTotal}`, `${amortizacaoTotal}`,`${saldoDevedor}`]);
+    tabelaPrice.push([`Total:`, `${totalPago}`,`${jurosTotal}`, `${amortizacaoTotal}`,`${saldoDevedor.toFixed(2)}`]);
 
     return tabelaPrice;
 }

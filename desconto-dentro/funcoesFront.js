@@ -1,10 +1,9 @@
 import { getTabelaPrice,
     calcularCoeficienteFinanciamento,
-     calcularTaxaDeJuros,
-     calcularFatorAplicado,
-     calcularValorFuturo,
-     calcularPrecoAPrazo,
-     calcularPMT,
+    calcularTaxaDeJuros,
+    calcularFatorAplicado,
+    calcularValorFuturo,
+    calcularPMT,
     getValorCorrigido,
     calcularValorAVoltar,
     converterJurosMensalParaAnual } from "./main.js"; 
@@ -12,7 +11,7 @@ import { getTabelaPrice,
 
    // dragAndSave("#cdcfieldset"); // $("#cdcfieldset").draggable()
 
-
+   
 function handleButtonClick(){
 
 
@@ -23,6 +22,9 @@ function handleButtonClick(){
     let box1Element = document.querySelector("#left-box");
     let box2Element = document.querySelector("#right-box");
 
+    let resultContainer = document.querySelector("#result-container");
+
+    togleVisibility(resultContainer,false);
 
     $("#submitButton").click(function (event) {
 
@@ -37,11 +39,6 @@ function handleButtonClick(){
         imprimir = document.querySelector("#ipr").checked;   
 
       
-
-
-         // let errorDiv = document.querySelector("#errorMessage");
-    // let successDiv = document.querySelector("#successMessage");
-
         var errorMessage = "";
         if (juros == 0 && valorFinal == 0) {
             errorMessage +=
@@ -64,13 +61,16 @@ function handleButtonClick(){
             $("#successMessage").show();
             $("#errorMessage").hide();
 
+
+            togleVisibility(resultContainer,true);
+         
+
             let tabelaPrice, valorCorrigido, coeficienteFinanciamento;
 
 
             if(valorFinal == 0){
                 coeficienteFinanciamento = calcularCoeficienteFinanciamento(juros, numeroParcelas);
                 valorFinal = calcularValorFuturo(coeficienteFinanciamento,juros,valorFinanciado,numeroParcelas,temEntrada);
-                //valorFinal = valorFinanciado * calcularFatorAplicado(temEntrada,numeroParcelas,coeficienteFinanciamento,juros);
             }
 
             tabelaPrice = getTabelaPrice(valorFinanciado,valorFinal,numeroParcelas,juros,temEntrada);
@@ -80,7 +80,14 @@ function handleButtonClick(){
 
             printBox1(valorFinanciado,valorFinal,numeroParcelas,juros,temEntrada, mesesAVoltar,box1Element);
             printBox2(valorFinanciado,valorFinal,numeroParcelas,juros,temEntrada, valorCorrigido, box2Element);
+            
+            if(imprimir){
+                imprimirResultado(resultContainer);
+            }else{
+                scrollTo("left-box");
 
+            }
+            
 
         }
 
@@ -88,8 +95,30 @@ function handleButtonClick(){
     });
 }
 
+function imprimirResultado(element){
+    // let openWindow = window.open("", "title", "attributes");
+    // openWindow.document.write(element.innerHTML);
+    // openWindow.document.close();
+    // openWindow.focus();
+    // openWindow.print();
+    // openWindow.close();
+    window.print();
+}
 
-// TODO: Fazer a tabela price retornar o Valor a voltar e o
+function togleVisibility(container,bool){
+    if(bool){
+        container.style.visibility = "visible"; 
+        
+
+    }else{
+        container.style.visibility = "hidden"; 
+    }
+}
+
+function scrollTo(hash) {
+    location.hash = "#" + hash;
+}
+
 
 function printTabelaPrice(tabelaPrice, tableDocumentElement){
 
@@ -102,13 +131,23 @@ function printTabelaPrice(tabelaPrice, tableDocumentElement){
                table += `<th> ${element} </th>`;
                 });
            table += "</tr></thead>";
-       }else{
+       }
+       else{
            table += "<tr>";
            tabelaPrice[i].forEach(function (element){
-               table += `<td> ${element} </td>`;
+
+            // Coloca Negrito se for último elemento (Totais)
+            if(i == tabelaPrice.length - 1){
+               table += `<td> <b> ${element}  <b> </td>`;
+            }
+            else{
+                table += `<td>  ${element} </td>`;
+            }
+
            });
            table += "</tr>";
        }
+       
    }
 
    tableDocumentElement.innerHTML = table;
@@ -130,51 +169,19 @@ Entrada: S/N
 
 function printBox1(precoAVista,precoAPrazo,numParcelas,taxaDeJuros,temEntrada,mesesAVoltar,divElement){
 
-
-    let valorParcelas = 0; 
-    let jurosReal = 0;
-
-
-
-    jurosReal = calcularTaxaDeJuros(precoAVista,precoAPrazo,numParcelas,temEntrada) * 100;
+    let jurosReal = calcularTaxaDeJuros(precoAVista,precoAPrazo,numParcelas,temEntrada) * 100;
     let coeficienteFinanciamento = calcularCoeficienteFinanciamento(jurosReal,numParcelas);
 
-
-    jurosReal = jurosReal.toFixed(4);
-
-    precoAPrazo = (precoAPrazo > 0) ? precoAPrazo : precoAVista * calcularCoeficienteFinanciamento;
-
-    let jurosTotal = 0, totalPago = 0, amortizacaoTotal = 0, saldoDevedorTotal = precoAVista;
- 
     let pmt = calcularPMT(precoAVista,coeficienteFinanciamento).toFixed(2);
 
- 
-     valorParcelas = (precoAPrazo / numParcelas).toFixed(2);
- 
     
- 
-
-    let jurosUsado = taxaDeJuros > 0? taxaDeJuros : jurosReal;
-    jurosUsado = jurosUsado;
-
-    /*
-Texto:
-Parcelamento: 
-Taxa: ##% Ao Mês (##% Ao Ano)
-Valor Financiado:
-Valor a voltar
-Meses a voltar
-Entrada: S/N
-*/
-
-
-    divElement.innerHTML = `<p>Parcelamento: ${numParcelas} </p>
-    <p>Taxa: ${taxaDeJuros}% Ao Mês (${converterJurosMensalParaAnual(taxaDeJuros)}% Ao Ano) </p>
-    <p>Valor Financiado: $ ${precoAVista} </p>
-    <p>Valor Final: $ ${precoAPrazo}</p>
-    <p>Meses a Voltar(Adiantados) ${mesesAVoltar} </p>
-    <p>Valor a voltar(Adiantamento da dívida) $ ${calcularValorAVoltar(pmt,numParcelas,mesesAVoltar).toFixed(2)} </p>
-    <p>Entrada: ${temEntrada ? "Sim" : "Não"} </p>`;
+    divElement.innerHTML = `<p><b>Parcelamento:</b> ${numParcelas} </p>
+    <p><b>Taxa:</b> ${taxaDeJuros}% Ao Mês (${converterJurosMensalParaAnual(taxaDeJuros)}% Ao Ano) </p>
+    <p><b>Valor Financiado:</b> $ ${precoAVista} </p>
+    <p><b>Valor Final:</b> $ ${precoAPrazo}</p>
+    <p><b>Meses a Voltar(Adiantados):</b> ${mesesAVoltar} </p>
+    <p><b>Valor a voltar(Adiantamento da dívida):</b> $ ${calcularValorAVoltar(pmt,numParcelas,mesesAVoltar).toFixed(2)} </p>
+    <p><b>Entrada:</b> ${temEntrada ? "Sim" : "Não"} </p>`;
 
 }
 
@@ -193,69 +200,30 @@ Percentual pago a mais = -0.00%
 */
 function printBox2(precoAVista,precoAPrazo,numParcelas,taxaDeJuros,temEntrada,valorCorrigido,divElement){
 
-    let text = "";
-
-    let valorParcelas = 0; 
     let jurosReal = 0;
-
-    let quantidadeParcelas = (temEntrada) ? (numParcelas - 1) : numParcelas;
 
 
     jurosReal = calcularTaxaDeJuros(precoAVista,precoAPrazo,numParcelas,temEntrada) * 100;
     let coeficienteFinanciamento = calcularCoeficienteFinanciamento(jurosReal,numParcelas);
 
-
     jurosReal = jurosReal.toFixed(4);
-
-    precoAPrazo = (precoAPrazo > 0) ? precoAPrazo : precoAVista * calcularCoeficienteFinanciamento;
-
-    let jurosTotal = 0, totalPago = 0, amortizacaoTotal = 0, saldoDevedorTotal = precoAVista;
  
     let pmt = calcularPMT(precoAVista,coeficienteFinanciamento).toFixed(2);
-
  
-     valorParcelas = (precoAPrazo / numParcelas).toFixed(2);
- 
-    
- 
-
-    let jurosUsado = taxaDeJuros > 0? taxaDeJuros : jurosReal;
-    jurosUsado = jurosUsado;
-
-
-  
-
-    let juros = jurosUsado, amortizacao = 0, saldo = 0, saldoDevedor = precoAVista;
-
-
-
-    /*
-    Texto:
-    Coeficiente de Financiamento: 
-    Prestacao: Conta la do PMT Ao mês
-    Valor Pago:
-    Taxa Real:
-    Valor Corrigido:
-    Juros Embutidos = ( x - y) / y * 100 = 11.11%
-    Desconto = ( x - y) / x * 100 = 10.00%
-    Excesso = $1889 .10 - $1889 .10 = $ -0.00
-    Excesso = ( $2099 .00 - $2099 .00) * 0.9000 = $ -0.00
-    Percentual pago a mais = -0.00%
-    */
-
     let jurosEmbutido = ((precoAPrazo - precoAVista) / precoAVista) * 100;
     jurosEmbutido = jurosEmbutido.toFixed(2);
     let desconto = ((precoAPrazo - precoAVista) / precoAPrazo) * 100;
+    let fatorAplicado = calcularFatorAplicado(temEntrada,numParcelas,coeficienteFinanciamento,taxaDeJuros);
     desconto = desconto.toFixed(2);
 
     divElement.innerHTML = `
-    <p> Prestação: $ ${pmt}</p>
-    <p> Taxa Real:  ${jurosReal}%</p>
-    <p> Coeficiente de Financiamento: ${coeficienteFinanciamento} </p>
-    <p>Fator Aplicado: ${calcularFatorAplicado(temEntrada,numParcelas,coeficienteFinanciamento,taxaDeJuros)}</p>
-    <p> Valor Corrigido: $ ${valorCorrigido} </p>
-    <p> Juros Embutido: ${jurosEmbutido}% </p>
-    <p> Desconto:  ${desconto}% </p>
+    <p><b>Prestação:</b> $ ${pmt}</p>
+    <p> <b>Taxa Real:</b>  ${jurosReal}%</p>
+    <p> <b>Coeficiente de Financiamento:</b> ${coeficienteFinanciamento.toFixed(6)} </p>
+    <p><b>Fator Aplicado:</b> ${fatorAplicado.toFixed(6)}</p>
+    <p> <b>Valor Corrigido:</b> $ ${valorCorrigido} </p>
+    <p> <b>Juros Embutido:</b> ${jurosEmbutido}% </p>
+    <p> <b>Desconto:</b>  ${desconto}% </p>
     `;
 }
 

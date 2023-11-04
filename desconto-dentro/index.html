@@ -70,7 +70,7 @@
                     />% mês<br />
 
                     <span class="input-group-addon">$</span>
-                    <label for="ipv">Valor Financiado: </label>
+                    <label for="ipv">Valor Financiado[Vista]: </label>
                     <input
                         id="ipv"
                         type="number"
@@ -83,7 +83,7 @@
                     /><br />
 
                     <span class="input-group-addon">$</span>
-                    <label for="ipp">Valor Final (opcional):</label>
+                    <label for="ipp">Valor Final(opcional):</label>
                     <input
                         id="ipp"
                         type="number"
@@ -117,12 +117,7 @@
                 </div>
                 <div class="messages">
                     
-                    <!-- <input
-                        id="submitButton"
-                        class="button"
-                        type="submit"
-                        value="Calcular"
-                    /> -->
+                  
                     <button id="submitButton" class="button" type="button" value="Calcular" style="display: block;">
                         Calcular
                     </button>
@@ -140,7 +135,7 @@
             </div>
         </fieldset>
 
-        <section id="result-container">
+        <div id="result-container">
             
             <div id="summary-container">
 
@@ -156,6 +151,9 @@
             </div>
 
             <div id="table-container">
+            
+                <h1>Tabela Price</h1>
+                
                 <table id="table-content">
                     
                 </table>
@@ -163,7 +161,7 @@
 
 
             
-        </section>
+        </div>
 
         <!-- <script src="LCG.js"></script> -->
 
