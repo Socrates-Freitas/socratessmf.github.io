@@ -100,7 +100,7 @@ function handleButtonClick(){
             printBox2(valorFinanciado,valorFinal,numeroParcelas,juros,temEntrada, valorCorrigido, box2Element);
             
             if(imprimir){
-                imprimirResultado(resultContainer);
+                imprimirResultado();
             }else{
                 scrollTo("left-box");
 
@@ -113,13 +113,8 @@ function handleButtonClick(){
     });
 }
 
-function imprimirResultado(element){
-    // let openWindow = window.open("", "title", "attributes");
-    // openWindow.document.write(element.innerHTML);
-    // openWindow.document.close();
-    // openWindow.focus();
-    // openWindow.print();
-    // openWindow.close();
+function imprimirResultado(){
+  
     window.print();
 }
 
@@ -186,6 +181,10 @@ Entrada: S/N
 */
 
 function printBox1(precoAVista,precoAPrazo,numParcelas,taxaDeJuros,temEntrada,mesesAVoltar,divElement){
+    precoAPrazo = Number(precoAPrazo);
+    precoAVista = Number(precoAVista);
+    numParcelas = Number(numParcelas);
+
 
     let jurosReal = calcularTaxaDeJuros(precoAVista,precoAPrazo,numParcelas,temEntrada) * 100;
     let coeficienteFinanciamento = calcularCoeficienteFinanciamento(jurosReal,numParcelas);
@@ -194,10 +193,12 @@ function printBox1(precoAVista,precoAPrazo,numParcelas,taxaDeJuros,temEntrada,me
 
   //  let textoTemEntrada = temEntrada? "+ 1" : "";
 
+    
+
     taxaDeJuros *= 100;
     divElement.innerHTML = `<p><b>Parcelamento:</b> ${numParcelas} ${temEntrada ? " (+ 1)": ""} </p>
-    <p><b>Taxa:</b> ${taxaDeJuros}% Ao Mês (${converterJurosMensalParaAnual(taxaDeJuros)}% Ao Ano) </p>
-    <p><b>Valor Financiado:</b> $ ${precoAVista.toFixed(2)} </p>
+    <p><b>Taxa:</b> ${taxaDeJuros.toFixed(4)}% Ao Mês (${converterJurosMensalParaAnual(taxaDeJuros)}% Ao Ano) </p>
+    <p><b>Valor Financiado:</b> $ ${Number(precoAVista).toFixed(2)} </p>
     <p><b>Valor Final:</b> $ ${precoAPrazo}</p>
     <p><b>Meses a Voltar(Adiantados):</b> ${mesesAVoltar} </p>
     <p><b>Valor a voltar(Adiantamento da dívida):</b> $ ${calcularValorAVoltar(pmt,numParcelas,mesesAVoltar).toFixed(2)} </p>
@@ -222,8 +223,15 @@ function printBox2(precoAVista,precoAPrazo,numParcelas,taxaDeJuros,temEntrada,va
 
     let jurosReal = 0;
 
+    precoAPrazo = Number(precoAPrazo);
+    precoAVista = Number(precoAVista);
+    numParcelas = Number(numParcelas);
 
-    jurosReal = calcularTaxaDeJuros(precoAVista,precoAPrazo,numParcelas,temEntrada) * 100;
+    //numParcelas = (!temEntrada)? numParcelas: numParcelas + 1;
+
+    jurosReal = calcularTaxaDeJuros(precoAVista,precoAPrazo, numParcelas,temEntrada) * 100;
+    console.log(`PC: ${numParcelas}`);
+
     let coeficienteFinanciamento = calcularCoeficienteFinanciamento(taxaDeJuros,numParcelas);
 
     jurosReal = jurosReal.toFixed(4);
