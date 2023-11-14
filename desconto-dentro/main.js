@@ -36,25 +36,69 @@ Se tiver valor a vista e a prazo -> Calcular taxa de juros commetodo de newton
 
 // desconto racional por dentro | ou desconto por dentro
 
+
+/*
+TODO: Calcular coisas antes da tabela price. Apenas pegar parametros necessarios
+  - Se possivel, apenas usar np,pmt,t,pv
+
+  - Tirar calculos de dentro da funcao getTabelaPrice()
+*/
+
+
+
+
 "use strict";
+
+/** 
+ 
+@param {Boolean} ehPrimeiraTaxa
+@param {Number} taxaJuros
+@returns {Number}
+
+**/
 
 function fe(ehPrimeiraTaxa, taxaJuros){
     return  (ehPrimeiraTaxa == true)?  1 + taxaJuros : 1;
 }
 
+/**
+ * @param {Number} taxaJuros 
+ * @param {Number} quantidadeParcelas 
+ * @returns {Number}
+*/
+
 export function calcularCoeficienteFinanciamento(taxaJuros, quantidadeParcelas){
-    let taxaCorrigida = taxaJuros / 100;
-    return taxaCorrigida / (1 - Math.pow(1 + taxaCorrigida, -quantidadeParcelas) );
+
+    let taxaCorrigida = (taxaJuros > 1) ? taxaJuros / 100 : taxaJuros;
+    // taxaCorrigida /= 100;
+
+    return taxaCorrigida / (1 - Math.pow(1 + taxaCorrigida, quantidadeParcelas * -1) );
 }
 
+/**
+ * @param {Number} coeficienteFinanciamento 
+ * @param {Number} taxaJuros
+ * @param {Number} precoAPrazo
+ * @param {Number} parcelas
+ * @param {Boolean} ehPrimeiraTaxa  
+ * @returns {Number}  
+*/
 export function calcularValorPresente(coeficienteFinanciamento, taxaJuros, precoAPrazo,parcelas,ehPrimeiraTaxa){
     let f = fe(ehPrimeiraTaxa, taxaJuros);
 
     return (precoAPrazo / parcelas) * (f / coeficienteFinanciamento);
 }
 
-/*
-    Calcula o Valor Final(Preço à prazo) quando não fornecido(Precisa da taxa de Juros)
+/** 
+   @description Calcula o Valor Final(Preço à prazo) quando não fornecido(Precisa da taxa de Juros)
+
+   @param {Number} coeficienteFinanciamento
+   @param {Number} taxaJuros
+   @param {Number} precoAVista
+   @param {Nymber} parcelas 
+   @param {Boolean} temEntrada
+   
+   @returns {Number}
 */
 export function calcularValorFuturo(coeficienteFinanciamento, taxaJuros, precoAVista,parcelas,temEntrada){
 
@@ -69,13 +113,26 @@ export function calcularValorFuturo(coeficienteFinanciamento, taxaJuros, precoAV
     return f/(numParcelas * coeficienteFinanciamento);
 }
 
+/**
+@description Sò converte taxa de juros mensal para anual.
+@param {Number} juros
+@returns {Number} 
+*/
+
 export function converterJurosMensalParaAnual(juros){
     juros /= 100;
     let resultado = (Math.pow(1 + juros, 12) - 1) * 100;
     return Number(resultado.toFixed(2));
 }
 
-// Função para calcular a taxa de juros usando o Método de Newton
+/**
+@description Função para calcular a taxa de juros usando o Método de Newton
+@param {Number} precoAVista
+@param {Number} precoAPrazo
+@param {Number} numParcelas 
+@param {Boolean} temEntrada
+@returns {Number}
+*/
 export function calcularTaxaDeJuros(precoAVista, precoAPrazo, numParcelas, temEntrada) {
     const tolerancia = 0.0001;  
     let taxaDeJuros = 0.1; // Palpite inicial
@@ -102,6 +159,13 @@ export function calcularTaxaDeJuros(precoAVista, precoAPrazo, numParcelas, temEn
     return taxaDeJuros;
 }
 
+/**
+ * 
+ * @param {Array<Array<String>>} tabelaPrice 
+ * @param {Number} numeroParcelas 
+ * @param {Number} mesesAVoltar 
+ * @returns {Number}
+ */
 export function getValorCorrigido(tabelaPrice,numeroParcelas,mesesAVoltar){
     mesesAVoltar = Number(mesesAVoltar);
     if(mesesAVoltar == 0 || mesesAVoltar >= numeroParcelas){
@@ -113,6 +177,13 @@ export function getValorCorrigido(tabelaPrice,numeroParcelas,mesesAVoltar){
     }
 }
 
+/**
+ * 
+ * @param {Number} pmt 
+ * @param {Number} numeroParcelas 
+ * @param {Number} mesesAVoltar 
+ * @returns {Number}
+ */
 export function calcularValorAVoltar(pmt, numeroParcelas,mesesAVoltar){
     if( Number(mesesAVoltar) > Number(numeroParcelas)){
         return 0;
@@ -122,6 +193,15 @@ export function calcularValorAVoltar(pmt, numeroParcelas,mesesAVoltar){
     }
 }
 
+/**
+ * 
+ * @param {Number} precoAPrazo 
+ * @param {Number} taxaDeJuros 
+ * @param {Number} precoAVista 
+ * @param {Boolean} temEntrada 
+ * @param {Number} numParcelas 
+ * @returns {Number}
+ */
 function calcularValorFuncao(precoAPrazo,taxaDeJuros,precoAVista, temEntrada, numParcelas){
 let a = 0; let b = 0; let c = 0;
     if(temEntrada){
@@ -140,6 +220,15 @@ let a = 0; let b = 0; let c = 0;
     }
 }
 
+/**
+ * 
+ * @param {Number} precoAPrazo 
+ * @param {Number} taxaDeJuros 
+ * @param {Number} precoAVista 
+ * @param {Boolean} temEntrada 
+ * @param {Number} numParcelas 
+ * @returns {Number}
+ */
 function calcularValorDerivadaFuncao(precoAPrazo,taxaDeJuros,precoAVista, temEntrada, numParcelas){
     let a = 0; let b = 0;
         if(temEntrada){
@@ -156,51 +245,50 @@ function calcularValorDerivadaFuncao(precoAPrazo,taxaDeJuros,precoAVista, temEnt
             return precoAVista - (precoAPrazo * b); 
         }
 }
-    
+ 
+/**
+ * 
+ * @param {Number} precoAVista 
+ * @param {Number} coeficienteFinanciamento 
+ * @returns {Number}
+ */
 export function calcularPMT(precoAVista,coeficienteFinanciamento){
     return precoAVista * coeficienteFinanciamento;
 }
 
-// TODO Tirar Variavel Valor Parcela, uar PMT
+/**
+ * 
+ * @param {Number} precoAVista 
+ * @param {Number} pmt 
+ * @param {Number} numParcelas 
+ * @param {Number} taxaDeJuros 
+ * @param {Boolean} temEntrada 
+ * @returns {Array<Array<String>>}
+ */
+export function getTabelaPrice(precoAVista,pmt,numParcelas,taxaDeJuros, temEntrada){
 
-export function getTabelaPrice(precoAVista,precoAPrazo,numParcelas,taxaDeJuros,temEntrada){
-
-    let jurosReal = 0;
-
-    let quantidadeParcelas = (temEntrada) ? (numParcelas - 1) : numParcelas;
-
-
-    jurosReal = calcularTaxaDeJuros(precoAVista,precoAPrazo,numParcelas,temEntrada) * 100;
-    let coeficienteFinanciamento = calcularCoeficienteFinanciamento(jurosReal,numParcelas);
-
-    precoAPrazo = (precoAPrazo > 0) ? precoAPrazo : precoAVista * coeficienteFinanciamento;
-
-    let jurosTotal = 0, totalPago = 0, amortizacaoTotal = 0;
- 
-    let pmt = Number(calcularPMT(precoAVista,coeficienteFinanciamento).toFixed(3));
-
-
-    let jurosUsado = taxaDeJuros > 0? taxaDeJuros : jurosReal;
+    let jurosTotal = 0, amortizacaoTotal = 0;
+    let totalPago = temEntrada? pmt : 0;
 
     let tabelaPrice = [["Mês","Prestação", "Juros", "Amortizacao","Saldo Devedor"]];
 
   
 
-    let juros = jurosUsado, amortizacao = 0, saldo = 0, saldoDevedor = precoAVista;
+    let juros = taxaDeJuros, amortizacao = 0,  saldoDevedor = precoAVista;
 
 
 
-    for(let i = 1; i <= quantidadeParcelas; i++){
+    for(let i = 1; i <= numParcelas; i++){
 
 
         // se for a primeira taxa, usar o juros la, senao, calcular
-        juros = (saldoDevedor * jurosUsado) / 100;
+        juros = (saldoDevedor * taxaDeJuros);
 
         amortizacao = (pmt - juros);
 
         saldoDevedor -=  amortizacao;
         
-        saldoDevedor = saldoDevedor > 0 ? saldoDevedor : 0;
+         saldoDevedor = saldoDevedor > 0 ? saldoDevedor : 0;
      
         tabelaPrice.push([i ,pmt.toFixed(2), juros.toFixed(3), amortizacao.toFixed(2), saldoDevedor.toFixed(2)]);
 
