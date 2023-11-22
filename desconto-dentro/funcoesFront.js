@@ -186,12 +186,15 @@ function printBox1(precoAVista,precoAPrazo,numParcelas,taxaDeJuros,temEntrada,me
     numParcelas = Number(numParcelas);
 
 
-    let jurosReal = calcularTaxaDeJuros(precoAVista,precoAPrazo,numParcelas,temEntrada) * 100;
-    let coeficienteFinanciamento = calcularCoeficienteFinanciamento(jurosReal,numParcelas);
+//    let jurosReal = calcularTaxaDeJuros(precoAVista,precoAPrazo,numParcelas,temEntrada) * 100;
+    let coeficienteFinanciamento = calcularCoeficienteFinanciamento(taxaDeJuros,numParcelas);
 
     let pmt = calcularPMT(precoAVista,coeficienteFinanciamento).toFixed(2);
 
-  //  let textoTemEntrada = temEntrada? "+ 1" : "";
+  //  let textoTemEntrada = temEntrada? "+ 1" : ""; 
+
+    console.log(`PMT: ${pmt}`);
+
 
     
 
